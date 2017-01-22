@@ -2,7 +2,7 @@ import request from 'superagent'
 
 /**
  * @param  {Object} options
- * @return {Object} Return Promise
+ * @return {Object}         Return Promise
  */
 function ajax(options) {
     const defaults = {
@@ -33,7 +33,7 @@ function ajax(options) {
 /**
  * @return {Object} Return url params
  */
-function getUrlParams() {
+function getURLParams() {
     const search = location.search.slice(1),
         rParam = /([^&]*)=([^&]*)/g
     let ret = {},
@@ -48,5 +48,5 @@ function getUrlParams() {
 
 export default {
     ajax,
-    getUrlParams
+    getURLParams
 }

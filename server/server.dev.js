@@ -1,6 +1,9 @@
 // Provide custom regenerator runtime and core-js
 require('babel-polyfill')
 
+// Node babel source map support
+require("source-map-support").install()
+
 // Javascript require hook
 require('babel-register')({
     presets: ['es2015', 'react', 'stage-0'],
@@ -34,12 +37,12 @@ const app = require('./app.js'),
     hotMiddleware = require('koa-webpack-hot-middleware'),
     views = require('koa-views'),
     router = require('./routes'),
-    middlewares = require('./middlewares'),
+    clientRoute = require('./middlewares/clientRoute'),
     config = require('../build/webpack.dev.config'),
     port = process.env.port || 3000,
     compiler = webpack(config)
 
-// Webpack hook event to write html file into /server/views due to server render
+// Webpack hook event to write html file into `/views/dev` from `/views/tpl` due to server render
 compiler.plugin('emit', (compilation, callback) => {
     const assets = compilation.assets
     let file, data
@@ -55,7 +58,7 @@ compiler.plugin('emit', (compilation, callback) => {
 })
 
 app.use(views(path.resolve(__dirname, '../views/dev'), {map: {html: 'ejs'}}))
-app.use(middlewares)
+app.use(clientRoute)
 app.use(router.routes())
 app.use(router.allowedMethods())
 console.log(`\n==> 🌎  Listening on port ${port}. Open up http://localhost:${port}/ in your browser.\n`)
